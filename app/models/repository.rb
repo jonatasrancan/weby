@@ -41,7 +41,7 @@ class Repository < ActiveRecord::Base
 
   STYLES = {
     mini: "95x70",
-    little: "190x140",
+    litle: "190x140",
     medium: "400x300",
     thumb: "160x160^",
     original: "original"
@@ -49,10 +49,10 @@ class Repository < ActiveRecord::Base
 
   has_attached_file :archive,
     styles: STYLES,
-    url: "/uploads/:site_id/:style_:basename.:extension",
+    url: "/uploads/:site_id/:style/:basename.:extension",
     convert_options: {
       mini: "-quality 90 -strip",
-      little: "-quality 90 -strip",
+      litle: "-quality 90 -strip",
       medium: "-quality 80 -strip",
       thumb: "-crop 160x160+0+0 +repage -quality 90 -strip",
       original: "-quality 80 -strip"}
