@@ -40,22 +40,22 @@ class Repository < ActiveRecord::Base
   validates_presence_of :description
 
   STYLES = {
-    mini: "95x70",
-    litle: "190x140",
-    medium: "400x300",
-    thumb: "160x160^",
-    original: "original"
+    i: "95x70",
+    l: "190x140",
+    m: "400x300",
+    t: "160x160^",
+    o: "original"
   }
 
   has_attached_file :archive,
     styles: STYLES,
-    url: "/uploads/:site_id/:style/:basename.:extension",
+    url: "/uploads/:style/:basename.:extension",
     convert_options: {
-      mini: "-quality 90 -strip",
-      litle: "-quality 90 -strip",
-      medium: "-quality 80 -strip",
-      thumb: "-crop 160x160+0+0 +repage -quality 90 -strip",
-      original: "-quality 80 -strip"}
+      i: "-quality 90 -strip",
+      l: "-quality 90 -strip",
+      m: "-quality 80 -strip",
+      t: "-crop 160x160+0+0 +repage -quality 90 -strip",
+      o: "-quality 80 -strip"}
 
   validates_attachment_presence :archive,
     :message => I18n.t('activerecord.errors.messages.attachment_presence'), :on => :create
@@ -63,7 +63,7 @@ class Repository < ActiveRecord::Base
   before_post_process :image?, :normalize_file_name
 
   # Metodo para incluir a url do arquivo no json
-  def archive_url(format = :original)
+  def archive_url(format = :o)
     self.archive.url(format)
   end
 
@@ -109,11 +109,11 @@ class Repository < ActiveRecord::Base
 
   def as_json options={}
     json = super(options)
-    json['repository'][:original_path] = self.archive.url(:original)
-    json['repository'][:little_path] = self.archive.url(:little)
-    json['repository'][:medium_path] = self.archive.url(:medium)
-    json['repository'][:mini_path] = self.archive.url(:mini)
-    json['repository'][:thumb_path] = self.archive.url(:thumb)
+    json['repository'][:o_path] = self.archive.url(:o)
+    json['repository'][:l_path] = self.archive.url(:l)
+    json['repository'][:m_path] = self.archive.url(:m)
+    json['repository'][:i_path] = self.archive.url(:i)
+    json['repository'][:t_path] = self.archive.url(:t)
     json
   end
 
